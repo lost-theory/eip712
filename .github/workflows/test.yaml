@@ -82,4 +82,10 @@ jobs:
           run: pip install .[test]
 
         - name: Run Tests
-          run: pytest -m "fuzzing" --no-cov -s
+          run: |
+            pytest -m "fuzzing" --no-cov -s && RC=$? || RC=$?
+            if [ $RC -eq 5 ]; then
+              echo "No tests marked with 'fuzzing' were found."
+              exit 0
+            fi
+            exit $RC
