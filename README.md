@@ -36,6 +36,15 @@ This project is in early development and should be considered an alpha.
 Things might not work, breaking changes are likely.
 Comments, questions, criticisms and pull requests are welcomed.
 
+## Documentation
+
+To build docs:
+
+```bash
+sphinx-autogen docs/index.rst  # automatically creates modules/*
+sphinx-build docs docs/_build
+```
+
 ## License
 
 This project is licensed under the [Apache 2.0 license](https://github.com/ApeWorX/eip712/blob/main/LICENSE).
