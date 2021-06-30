@@ -21,12 +21,36 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -e .[release]
-        
+
     - name: Build
       run: python setup.py sdist bdist_wheel
+
+    - name: Move last commit's documentation into tag specific folder
+      run: |
+          git clone https://github.com/lost-theory/eip712 --branch gh-pages --single-branch gh-pages
+          echo $GITHUB_REF
+          echo $GITHUB_REF
+          echo $GITHUB_REF
+          echo $GITHUB_REF
+          echo $GITHUB_REF
+          #mkdir -p gh-pages/$GITHUB_REF
+          #cp -r docs/_build/* gh-pages/$GITHUB_REF
+          #cd gh-pages
+          #touch .nojekyll
+          #git config --local user.email "action@github.com"
+          #git config --local user.name "GitHub Action"
+          #git add .
+          #git commit -m "Update documentation" -a || true
+          # The above command will fail if no changes were present, so we use "|| true" to ignore that
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: gh-pages
+        directory: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: twine upload dist/* --verbose
+      run: echo twine upload dist/* --verbose
