@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Search &mdash; eip712  documentation</title>
   <link rel="stylesheet" href="/eip712/latest/_static//css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="/eip712/latest/_static//custom.css" type="text/css" />
   <link rel="stylesheet" href="/eip712/latest/_static//pygments.css" type="text/css" />
     
   <!--[if lt IE 9]>
@@ -15,6 +16,10 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
+    <script src="_static/custom.js"></script>
+  <script>
+      var PROJECT = "eip712";
+  </script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -28,6 +33,15 @@
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> eip712
           </a>
+
+          <div class="version">
+            <label for="version-picker" id="version-picker-label">Version:</label>
+            <select id="version-picker">
+              <option value="">Select version...</option>
+              <option value="latest">latest</option>
+              <option value="stable">stable</option>
+            </select>
+          </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="#" method="get">
     <input type="text" name="q" placeholder="Search docs" />
