@@ -6,6 +6,7 @@ gh-pages branch.
 import os, subprocess, re, shutil
 from pathlib import Path
 from distutils.version import LooseVersion
+import argparse
 
 REDIRECT_HTML = """
 <!DOCTYPE html>
@@ -14,6 +15,8 @@ REDIRECT_HTML = """
 <meta http-equiv="refresh" content="0; URL=./stable/">
 """
 
+DOCS_BUILD_PATH = Path("docs/_build")
+
 
 def run(args):
     print("Running:", args)
@@ -21,8 +24,12 @@ def run(args):
 
 
 def main():
-    # clean up build directory
-    shutil.rmtree(Path("docs/_build"), ignore_errors=True)
+    # clean out the contents of the build directory, but leave the directory in
+    # place so that serving up files continues to work when you're developing
+    # docs locally
+    DOCS_BUILD_PATH.mkdir(exist_ok=True)
+    for path in DOCS_BUILD_PATH.iterdir():
+        shutil.rmtree(path) if path.is_dir() else path.unlink()
 
     # build docs for each version
     run(["sphinx-multiversion", "docs", "docs/_build"])
@@ -48,7 +55,7 @@ def main():
     elif all_releases:
         stable = max(all_releases)
     else:
-        print("WARNING: Couldn't find stable release. Going to use 'latest' for 'stable'.")
+        print("WARNING: Couldn't find any released versions. Going to use 'latest' for 'stable'.")
         stable = "latest"
     print(f"Copying latest stable release {stable} to 'stable'.")
     shutil.copytree(Path("docs/_build") / str(stable), Path("docs/_build/stable"))
@@ -59,4 +66,17 @@ def main():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--rsync",
+        help="Where to put the fully built docs subdir for serving in development. /tmp/projectname is recommended.",
+    )
+    args = parser.parse_args()
     main()
+    if args.rsync:
+        run(["rsync", "-pthrvz", "--delete", "./docs/_build/", args.rsync])
+        print(
+            "NOTE: To serve these files in development, run `python3 -m http.server` inside `{}`, then go to http://127.0.0.1:8000/projectname in the browser.".format(
+                Path(args.rsync).parent
+            )
+        )

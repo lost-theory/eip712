@@ -21,6 +21,7 @@
 
   {#- CSS #}
   <link rel="stylesheet" href="{{ fixpath(pathto('_static/' + style, 1)) }}" type="text/css" />
+  <link rel="stylesheet" href="{{ fixpath(pathto('_static/custom.css', 1)) }}" type="text/css" />
   <link rel="stylesheet" href="{{ fixpath(pathto('_static/pygments.css', 1)) }}" type="text/css" />
   {%- for css in css_files %}
     {%- if css|attr("rel") %}
@@ -78,6 +79,7 @@
       {%- endfor %}
     {%- endif %}
     <script src="{{ pathto('_static/js/theme.js', 1) }}"></script>
+    <script src="{{ pathto('_static/custom.js', 1) }}"></script>
 
     {#- OPENSEARCH #}
     {%- if use_opensearch %}
@@ -86,6 +88,9 @@
           href="{{ pathto('_static/opensearch.xml', 1) }}"/>
     {%- endif %}
   {%- endif %}
+  <script>
+      var PROJECT = "{{ project }}";
+  </script>
   {%- endblock %}
 
   {%- block linktags %}
@@ -120,7 +125,6 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" {% if theme_style_nav_header_background %} style="background: {{theme_style_nav_header_background}}" {% endif %}>
           {%- block sidebartitle %}
-
           {%- if logo and theme_logo_only %}
             <a href="{{ pathto(master_doc) }}">
           {%- else %}
@@ -147,6 +151,18 @@
             {%- endif %}
           {%- endif %}
 
+          <div class="version">
+            <label for="version-picker" id="version-picker-label">Version:</label>
+            <select id="version-picker">
+              <option value="">Select version...</option>
+              <option value="latest">latest</option>
+              <option value="stable">stable</option>
+              {%- for tag in versions.tags %}
+                  <option value="{{ tag.name }}">{{ tag.name }}</option>
+              {%- endfor %}
+            </select>
+          </div>
+
           {%- include "searchbox.html" %}
 
           {%- endblock %}
@@ -165,6 +181,7 @@
               <!-- Local TOC -->
               <div class="local-toc">{{ toc }}</div>
             {%- endif %}
+
           {%- endblock %}
         </div>
         {%- endblock %}
